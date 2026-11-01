@@ -14,7 +14,7 @@ Guide pour installer XAMPP sur Ubuntu et ouvrir directement le **tableau de bord
 
 ## 1. Télécharger l'installateur
 
-### Option A : la dernière version, automatiquement (recommandé)
+### La dernière version, automatiquement (recommandé)
 
 SourceForge propose un lien « dernière version » qui ne contient aucun numéro :
 
