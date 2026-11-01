@@ -144,12 +144,44 @@ chmod +x ~/.local/bin/xampp-panel.sh
 
 ### Étape 3 : créer le lanceur du menu
 
+Le lanceur permet d'afficher **XAMPP Control Panel** dans le menu des applications Ubuntu et de démarrer son interface en cliquant sur son icône.
+
+#### 3.1 Créer le fichier lanceur
+
+Ouvre le terminal (`Ctrl + Alt + T`) et exécute :
+
 ```bash
 mkdir -p ~/.local/share/applications
 nano ~/.local/share/applications/xampp-panel.desktop
 ```
 
-Colle ce contenu en remplaçant `VOTRE_NOM` par ton nom d'utilisateur (commande `whoami`) :
+#### 3.2 Identifier le nom d'utilisateur
+
+Dans un autre terminal, exécute :
+
+```bash
+whoami
+```
+
+Cette commande affiche le nom de l'utilisateur actuellement connecté à Ubuntu.
+
+Par exemple, si le terminal affiche :
+
+```text
+jean
+```
+
+Le dossier personnel de cet utilisateur est :
+
+```text
+/home/jean
+```
+
+Chaque utilisateur doit utiliser son propre nom dans le chemin du lanceur.
+
+#### 3.3 Configurer le lanceur
+
+Dans le fichier ouvert avec Nano, copie le contenu suivant :
 
 ```ini
 [Desktop Entry]
@@ -157,13 +189,52 @@ Version=1.0
 Type=Application
 Name=XAMPP Control Panel
 Comment=Gérer les services XAMPP
-Exec=/home/VOTRE_NOM/.local/bin/xampp-panel.sh
+Exec=/home/NOM_UTILISATEUR/.local/bin/xampp-panel.sh
 Icon=/opt/lampp/htdocs/favicon.ico
 Terminal=false
 Categories=Development;
 ```
 
-> Utilise un chemin complet dans `Exec` : le symbole `~` n'est pas interprété dans un fichier `.desktop`.
+**Important : personnaliser la ligne `Exec=`**
+
+Remplace `NOM_UTILISATEUR` par le nom obtenu avec la commande `whoami`.
+
+Par exemple :
+- Si `whoami` affiche `jean`, utilise `/home/jean`.
+- Si `whoami` affiche `pierre`, utilise `/home/pierre`.
+- Si `whoami` affiche `alice`, utilise `/home/alice`.
+
+La ligne doit donc avoir cette forme :
+
+```ini
+Exec=/home/jean/.local/bin/xampp-panel.sh
+```
+
+Ne conserve pas le texte `NOM_UTILISATEUR` : il doit impérativement être remplacé.
+
+**Explication des paramètres :**
+
+- `Exec=` indique le script qui sera exécuté au clic sur l'icône. Il doit pointer vers le script `xampp-panel.sh` créé à l'étape 2. Ne remplace pas cette ligne par `pkexec /opt/lampp/manager-linux-x64.run`, car cela ne transmet pas correctement les informations nécessaires à l'affichage de l'interface graphique.
+- `Icon=` définit l'image affichée dans le menu Ubuntu. Ici, on utilise le favicon de XAMPP.
+- `Name=` définit le nom affiché dans le menu des applications.
+
+#### 3.4 Enregistrer le fichier
+
+Dans Nano :
+
+1. Appuie sur `Ctrl + O`.
+2. Appuie sur `Entrée` pour confirmer.
+3. Appuie sur `Ctrl + X` pour quitter.
+
+#### 3.5 Rendre le lanceur exécutable
+
+Exécute dans le terminal :
+
+```bash
+chmod +x ~/.local/share/applications/xampp-panel.desktop
+```
+
+Le lanceur est maintenant créé et prêt à être activé à l'étape suivante.
 
 ### Étape 4 : rendre le lanceur exécutable et l'activer
 
