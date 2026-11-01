@@ -23,62 +23,6 @@ wget --content-disposition "https://sourceforge.net/projects/xampp/files/latest/
 ls -lh xampp-*.run
 ```
 
-`--content-disposition` garde le vrai nom du fichier (avec sa version). Vérifie que le fichier téléchargé contient bien `linux` dans son nom. Si ce n'est pas le cas (par exemple un installateur Windows), utilise l'option B.
-
-### Option B : script qui trouve la dernière version Linux
-
-Ce script lit la liste des fichiers XAMPP Linux sur SourceForge et télécharge le plus récent.
-
-```bash
-#!/bin/bash
-set -e
-
-RSS="https://sourceforge.net/projects/xampp/rss?path=/XAMPP%20Linux"
-
-URL=$(curl -sL "$RSS" \
-  | grep -oP 'https://sourceforge\.net/projects/xampp/files/XAMPP%20Linux/[^<"]*xampp-linux-x64-[^<"]*-installer\.run' \
-  | sort -uV | tail -n1)
-
-if [ -z "$URL" ]; then
-  echo "Aucune version trouvée. Vérifie https://www.apachefriends.org/download.html"
-  exit 1
-fi
-
-echo "Téléchargement : $URL"
-wget "$URL" -O xampp-installer.run
-chmod +x xampp-installer.run
-echo "Prêt : sudo ./xampp-installer.run"
-```
-
-Enregistre-le sous `get-xampp.sh`, puis :
-
-```bash
-chmod +x get-xampp.sh
-./get-xampp.sh
-```
-
-### Option C : version précise (manuelle)
-
-Si tu veux une version PHP bien précise, remplace le numéro dans l'URL :
-
-```bash
-wget "https://sourceforge.net/projects/xampp/files/XAMPP%20Linux/8.2.12/xampp-linux-x64-8.2.12-0-installer.run/download" -O xampp-installer.run
-```
-
-> Le numéro de version change à chaque mise à jour. En cas d'erreur 404, récupère le lien actuel sur <https://www.apachefriends.org/download.html>.
-
-### Mettre à jour une installation existante
-
-Avant d'installer une nouvelle version par-dessus l'ancienne, sauvegarde tes sites et tes bases de données :
-
-```bash
-sudo /opt/lampp/lampp stop
-sudo cp -r /opt/lampp/htdocs ~/backup-htdocs
-sudo cp -r /opt/lampp/var/mysql ~/backup-mysql
-```
-
-Lance ensuite le nouvel installateur (étape 2). Si besoin, remets tes fichiers depuis les sauvegardes.
-
 ## 2. Installer
 
 ```bash
@@ -92,7 +36,11 @@ XAMPP s'installe dans `/opt/lampp`.
 
 ```bash
 sudo /opt/lampp/lampp start
+```
+```bash
 sudo /opt/lampp/lampp status
+```
+```bash
 sudo /opt/lampp/lampp stop
 ```
 
@@ -195,14 +143,12 @@ Terminal=false
 Categories=Development;
 ```
 
-**Important : personnaliser la ligne `Exec=`**
+**Important : Il faut personnaliser la ligne `Exec=`**
 
 Remplace `NOM_UTILISATEUR` par le nom obtenu avec la commande `whoami`.
 
 Par exemple :
 - Si `whoami` affiche `jean`, utilise `/home/jean`.
-- Si `whoami` affiche `pierre`, utilise `/home/pierre`.
-- Si `whoami` affiche `alice`, utilise `/home/alice`.
 
 La ligne doit donc avoir cette forme :
 
@@ -226,17 +172,7 @@ Dans Nano :
 2. Appuie sur `Entrée` pour confirmer.
 3. Appuie sur `Ctrl + X` pour quitter.
 
-#### 3.5 Rendre le lanceur exécutable
-
-Exécute dans le terminal :
-
-```bash
-chmod +x ~/.local/share/applications/xampp-panel.desktop
-```
-
-Le lanceur est maintenant créé et prêt à être activé à l'étape suivante.
-
-### Étape 4 : rendre le lanceur exécutable et l'activer
+### Étape 4 : Rendre le lanceur exécutable et l'activer
 
 ```bash
 chmod +x ~/.local/share/applications/xampp-panel.desktop
