@@ -14,16 +14,41 @@ Guide pour installer XAMPP sur Ubuntu et ouvrir directement le **tableau de bord
 
 ## 1. Télécharger l'installateur
 
-### La dernière version, automatiquement (recommandé)
+> **Attention :** n'utilise pas le lien SourceForge `.../files/latest/download`. Avec `wget`, il renvoie l'installateur **Windows** (`.exe`), inutilisable sur Ubuntu.
 
-SourceForge propose un lien « dernière version » qui ne contient aucun numéro :
+### Option A : depuis le site officiel (recommandé)
+
+1. Ouvre <https://www.apachefriends.org/fr/download.html>.
+2. Clique sur **XAMPP pour Linux** : le fichier `xampp-linux-x64-X.X.X-0-installer.run` arrive dans `~/Téléchargements`.
+3. Renomme-le pour simplifier les commandes suivantes :
 
 ```bash
-wget --content-disposition "https://sourceforge.net/projects/xampp/files/latest/download"
-ls -lh xampp-*.run
+cd ~/Téléchargements
+mv xampp-linux-*-installer.run xampp-installer.run
+ls -lh xampp-installer.run
 ```
 
+### Option B : en ligne de commande
+
+Les versions Linux sont dans le dossier `XAMPP Linux` de SourceForge : <https://sourceforge.net/projects/xampp/files/XAMPP%20Linux/>. Choisis une version, puis télécharge-la sous le nom `xampp-installer.run` (exemple avec la 8.2.12, à adapter) :
+
+```bash
+cd ~/Téléchargements
+wget -O xampp-installer.run "https://sourceforge.net/projects/xampp/files/XAMPP%20Linux/8.2.12/xampp-linux-x64-8.2.12-0-installer.run/download"
+```
+
+### Vérifier le fichier
+
+```bash
+ls -lh xampp-installer.run
+file xampp-installer.run
+```
+
+Le fichier doit peser environ 150 Mo et `file` doit indiquer un exécutable **ELF** pour Linux. S'il pèse quelques Ko ou si `file` indique du HTML, le téléchargement a échoué : refais-le depuis le site officiel.
+
 ## 2. Installer
+
+Depuis le dossier où se trouve le fichier (`~/Téléchargements`) :
 
 ```bash
 chmod +x xampp-installer.run
@@ -31,6 +56,12 @@ sudo ./xampp-installer.run
 ```
 
 XAMPP s'installe dans `/opt/lampp`.
+
+Si l'installateur échoue sur Ubuntu 24.04 à cause de bibliothèques manquantes :
+
+```bash
+sudo apt install -y libncurses5 libnsl2
+```
 
 ## 3. Démarrer, vérifier et arrêter
 
